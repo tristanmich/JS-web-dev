@@ -1,7 +1,8 @@
 {
   "name": "epfbook",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "echo": "echo 'HELLO'",
@@ -9,7 +10,6 @@
   },
   "author": "Tristan MICHELENA",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "express": "^4.18.2"
   },
