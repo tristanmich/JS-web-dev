@@ -4,7 +4,7 @@ const port = 3000
 const fs = require("fs")
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Hello World!');
 })
 
 // GET method route
@@ -35,5 +35,21 @@ app.get('/csv', function (req, res) {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Example app listening on port ${port}`);
+});
+
+app.use(express.json())
+app.post('/students/create', function (req, res, next) {
+  console.log(req.body.name, req.body.school);
+  const csvLine =`${req.body.name},${req.body.school}`;
+  console.log(csvLine);
+  fs.writeFile('Sheet_school.csv', csvLine, {
+    encoding: "utf8",
+    flag: "a"
+  }, (err) => {
+    if (err) throw err; {
+      console.log(err)
+    } 
+    res.json("Student created");
+  });
+});
