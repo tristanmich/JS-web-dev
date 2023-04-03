@@ -1,0 +1,45 @@
+body {
+    background-color: whitesmoke;
+  }
+  
+  main {
+    background-color: honeydew;
+    max-width: 800px;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+  }
+  label {
+    max-width: 800px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  input {
+    max-width: 800px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  ul {
+    background-color: antiquewhite;
+    margin: auto;
+    position: relative;
+  }
+  
+  h2 {
+    background-color: bisque;
+    color-interpolation-filters: auto;
+    color: rgb(22, 3, 3);
+    text-align: center;
+  }
+  
+/*Hide long text on small screen    */
+@media (max-width : 1000px) {
+    p.long-text {
+        display: None;
+    }
+}
