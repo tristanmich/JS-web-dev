@@ -15,3 +15,11 @@ app.get('/students', (req, res) => {
     res.render("students", { students: list });
   });
 });
+
+// Environment variable authentification
+app.use(
+    basicAuth({
+      users: { [process.env.ADMIN_USERNAME]: process.env.ADMIN_PASSWORD},
+      challenge: true
+    })
+  );
