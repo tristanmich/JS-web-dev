@@ -1,31 +1,26 @@
+// Add the constances
 const express = require('express');
 const app = express();
 const port = 3000;
 const fs = require("fs");
 const path = require("path");
+const bcrypt = require('bcrypt');
+// Authentification
+const basicAuth = require('express-basic-auth');
 
 // Enable EJS Templates 
 const ejs = require('ejs');
 app.set('views','./views');
 app.set('view engine','ejs')
 
-// Authentification
-// const app = require('express')();
-const basicAuth = require('express-basic-auth');
-
+// Initialize the authentification
 app.use(basicAuth({
   authorizer: encryptedPasswordAuthorizer,
   authorizeAsync: true,
   challenge: true
 }))
 
-// Function to determine the authentification
-function myAsyncAuthorizer(username, password, cb) {
-  if (username.startsWith('A') & password.startsWith('secret'))
-      return cb(null, true)
-  else
-      return cb(null, false)
-}
+// Authorization: "Bearer <your-token>" , instead of Authorization: "Basic<encoded-username-and-password>"
 
 // Function to determine the authentification
 function encryptedPasswordAuthorizer(username, password, cb) {
@@ -44,17 +39,33 @@ function encryptedPasswordAuthorizer(username, password, cb) {
       dict[header[1]] = values[1];
       users.push(dict);
     }
-    const foundUser = users.find(user => user.username === username);
-    if (!foundUser) 
-      return cb(null, false);
-    else 
-      if (foundUser.password == password)
-        return cb(null, true);
-      else 
-        return cb(null, false);
+    const storedUser = users.find((possibleUser) => {
+      return basicAuth.safeCompare(possibleUser.username, username);
+    });
+    if (!storedUser) {
+      // username not found
+      cb(null, false);
+    } else {
+      bcrypt.compare(password, storedUser.password, cb);
+    }
   });
-
 }
+
+// POST method route
+// using secure cookies
+app.post("/api/login", (req, res) => {
+  console.log("current cookies:", req.cookies);
+  // We assume that you check if the user can login based on "req.body"
+  // and then generate an authentication token
+  const token = "FOOBAR";
+  const tokenCookie = {
+    path: "/",
+    httpOnly: true,
+    expires: new Date(Date.now() + 60 * 60 * 1000),
+  };
+  res.cookie("auth-token", token, tokenCookie);
+  res.send("OK");
+});
 
 // Serving some HTML as a file
 app.get('/home', function (req, res) {
