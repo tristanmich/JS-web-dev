@@ -10,11 +10,15 @@
 
             Suspendisse dolor odio, venenatis nec elit eu, condimentum vehicula tortor. Etiam viverra sit amet ante accumsan sodales. Nam in elit enim. Ut in consequat lectus, eu auctor urna. Donec in elementum arcu. Aenean condimentum felis ante, et fermentum est porta non. Duis faucibus scelerisque eros eu pellentesque. Donec malesuada felis leo, sit amet dapibus ipsum aliquet nec. Nam viverra sem nulla, at vehicula augue pharetra facilisis. Nullam non ipsum sit amet enim convallis blandit ut a dolor. Morbi commodo nulla quis purus facilisis pretium. Nunc efficitur blandit dictum. Vestibulum sed posuere magna. 
         </p>
-        <ul>
+        <ul class="students"></ul>
+        <br>
         <% students.forEach(function(student) { %>
             <li><%= student.name %> | <%= student.school %></li>
         <%})%>
         </ul>
+        <br>
+        <script type="text/javascript" src="/students.js" ></script>
+        <button id="test">Click me</button>
         </main>
     </body>
 </html>

@@ -23,15 +23,24 @@ body {
     justify-content: center;
     align-items: center;
   }
-  
+  p {
+    background-color: rgb(249, 215, 250);
+    margin: auto;
+    position: relative;
+  }
   ul {
     background-color: antiquewhite;
     margin: auto;
     position: relative;
   }
+  a {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+  }
   
   h2 {
-    background-color: bisque;
+    background-color: rgb(215, 194, 228);
     color-interpolation-filters: auto;
     color: rgb(22, 3, 3);
     text-align: center;
