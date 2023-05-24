@@ -14,9 +14,13 @@
     "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "d3-fetch": "^3.0.1",
 =======
 >>>>>>> 6130c277072ba14f33d3ddf6be936302d523d48c
+=======
+    "d3-fetch": "^3.0.1",
+>>>>>>> 2a5840a (TP6 nvmrc)
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-basic-auth": "^1.2.1"
