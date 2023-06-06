@@ -23,6 +23,8 @@ This will start the app with Nodemon, which automatically restarts the server wh
 
 2. Access the app by opening your web browser and navigating to http://localhost:3000
 
+3. The username is admin and the password is admin.
+
 ## Dependencies
 
 - bcrypt: ^5.1.0

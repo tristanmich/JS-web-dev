@@ -1,0 +1,72 @@
+body {
+  background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  margin: 0;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-top: 0;
+}
+
+p.long-text {
+  background-color: #d3d3d3;
+  padding: 30px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+ul.students {
+  background-color: #fefefe;
+  padding: 20px;
+  border-radius: 5px;
+  list-style-type: none;
+}
+
+ul.students li {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+button {
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+/* Hide long text on small screens */
+@media (max-width: 1000px) {
+  p.long-text {
+    display: none;
+  }
+}
+
+

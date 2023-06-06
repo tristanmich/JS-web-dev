@@ -3,20 +3,20 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let link = document.createElement("a");
 
     // Set the href attribute
-    link.setAttribute("href", "/students/create");
+    link.setAttribute("href", "/student/create");
 
     // Set the link text
     link.textContent = "Create a new student";
 
     // Append the link to the list element
-    document.body.appendChild(link);
+    //document.body.appendChild(link);
 
     // Select the button using querySelector
-    let button = document.querySelector("#test");
+    let button = document.querySelector("#b_create_student");
 
     // Add event listener for the click event
     button.addEventListener("click", function() {
-        // Show an alert
-        alert("You clicked!");
+        // Navigate to the create student page
+        window.location.href = "/student/create";
     });
 });

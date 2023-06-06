@@ -59,9 +59,44 @@ app.use(express.static("public"));
 // Define the encoding => URL Extension
 app.use(express.urlencoded({ extended: true }));
 
+// Define a route for /students/:id
+app.get('/students/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  dataFromCsvFile('Sheet_school.csv', (err, students) => {
+    if (err) {
+      res.status(500).send('Internal server error');
+      return;
+    }
+    if (id >= 0 && id < students.length) {
+      const student = students[id];
+      res.render('student_details', { student, id });
+    } else {
+      res.send('Student not found');
+    }
+  });
+});
+
+// GET method route
+app.get('/student/details', (req, res) => {
+  const student = {
+      name: "Student name",
+      school: "EPF"
+  };
+  res.render('student_details', { student });
+});
+
 // GET method route
 app.get('/test', (req, res) => {
-  res.send('Hello World!');
+  res.send(`
+    <html>
+      <head>
+        <link rel="stylesheet" href="/style.css">
+      </head>
+      <body>
+        <h1>Hello World!</h1>
+      </body>
+    </html>
+  `);
 });
 
 // GET method route
@@ -89,12 +124,12 @@ app.get('/students', (req, res) => {
 });
 
 // Create new student display
-app.get('/students/create', (req, res) => {
+app.get('/student/create', (req, res) => {
   res.render('create-student');
 });
 
 // Create new student storing data
-app.post('/students/create', (req, res) => {
+app.post('/student/create', (req, res) => {
   console.log(req.body);
   console.log(req.body.name, req.body.school);
   const csvLine =`\n${req.body.name},${req.body.school}`;
@@ -106,7 +141,7 @@ app.post('/students/create', (req, res) => {
     if (err) throw err; {
       console.log(err)
     } 
-    res.redirect("/students/create?created=1");
+    res.redirect("/student/create?created=1");
   });
 });
 
@@ -178,7 +213,7 @@ app.get('/api/students', function (req, res) {
 
 // POST method route /api/students/create
 app.use(express.json())
-app.post('/api/students/create', function (req, res, next) {
+app.post('/api/student/create', function (req, res, next) {
   console.log(req.body.name, req.body.school);
   const csvLine =`${req.body.name},${req.body.school}`;
   console.log(csvLine);
