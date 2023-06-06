@@ -20,8 +20,6 @@ app.use(basicAuth({
   challenge: true
 }))
 
-// Authorization: "Bearer <your-token>" , instead of Authorization: "Basic<encoded-username-and-password>"
-
 // Function to determine the authentification
 function encryptedPasswordAuthorizer(username, password, cb) {
   fs.readFile('user.csv', 'utf8', (err, data) => {
@@ -51,22 +49,6 @@ function encryptedPasswordAuthorizer(username, password, cb) {
   });
 }
 
-// POST method route
-// using secure cookies
-app.post("/api/login", (req, res) => {
-  console.log("current cookies:", req.cookies);
-  // We assume that you check if the user can login based on "req.body"
-  // and then generate an authentication token
-  const token = "FOOBAR";
-  const tokenCookie = {
-    path: "/",
-    httpOnly: true,
-    expires: new Date(Date.now() + 60 * 60 * 1000),
-  };
-  res.cookie("auth-token", token, tokenCookie);
-  res.send("OK");
-});
-
 // Serving some HTML as a file
 app.get('/home', function (req, res) {
   res.sendFile(path.join(__dirname,"./views/home.html"));
@@ -78,8 +60,13 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
 // GET method route
-app.get('/', (req, res) => {
+app.get('/test', (req, res) => {
   res.send('Hello World!');
+});
+
+// GET method route
+app.get('/', (req, res) => {
+  res.redirect("/home");
 });
 
 // GET method route
@@ -144,6 +131,24 @@ function dataFromCsvFile(name, callback) {
   });
 }
 
+/// API
+// POST method route
+// Authorization: "Bearer <your-token>" , instead of Authorization: "Basic<encoded-username-and-password>"
+// using secure cookies
+app.post("/api/login", (req, res) => {
+  console.log("current cookies:", req.cookies);
+  // We assume that you check if the user can login based on "req.body"
+  // and then generate an authentication token
+  const token = "FOOBAR";
+  const tokenCookie = {
+    path: "/",
+    httpOnly: true,
+    expires: new Date(Date.now() + 60 * 60 * 1000),
+  };
+  res.cookie("auth-token", token, tokenCookie);
+  res.send("OK");
+});
+
 // GET method route /api/student
 app.get('/api/student', function (req, res) {
   res.send(["My name is Tristan and I try to understand the Get method", 
@@ -188,7 +193,7 @@ app.post('/api/students/create', function (req, res, next) {
   });
 });
 
-// Define the port
+// Print the port in the console
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
