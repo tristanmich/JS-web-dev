@@ -6,7 +6,25 @@ body {
     height: 100vh;
     margin: 0;
     padding: 0;
-  }
+    background-image: url('logo.png');
+    background-repeat: no-repeat;
+    background-position: 20px 20px;
+    background-size: 200px;    
+  }  
+
+button {
+    text-align: center;
+    text-decoration: none;
+    color: #f0f0f0;
+    padding: 10px 20px;
+    background-color: #121212;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 20px;
+    position: relative;
+    z-index: 1;
+    pointer-events: auto;
+  } 
 
 .welcome-text {
     text-align: center;

@@ -3,6 +3,10 @@ body {
   font-family: Arial, sans-serif;
   padding: 20px;
   margin: 0;
+  background-image: url('logo.png');
+  background-repeat: no-repeat;
+  background-position: 20px 20px;
+  background-size: 200px;   
 }
 
 main {

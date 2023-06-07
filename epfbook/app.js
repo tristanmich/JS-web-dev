@@ -1,3 +1,8 @@
+// Web programming LAB
+// Tristan MICHELENA
+// EPF 4A Data Engineering
+// 06/07/2023
+
 // Add the constances
 const express = require('express');
 const app = express();
@@ -5,13 +10,19 @@ const port = 3000;
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require('bcrypt');
+// Enable EJS Templates 
+const ejs = require('ejs');
 // Authentification
 const basicAuth = require('express-basic-auth');
 
-// Enable EJS Templates 
-const ejs = require('ejs');
+// Define the engine
 app.set('views','./views');
 app.set('view engine','ejs')
+
+// Print the port in the console
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
+});
 
 // Initialize the authentification
 app.use(basicAuth({
@@ -19,64 +30,54 @@ app.use(basicAuth({
   authorizeAsync: true,
   challenge: true
 }))
+// Enable static files loading
+app.use(express.static("public"));
+// Define the encoding => URL Extension
+app.use(express.urlencoded({ extended: true }));
 
 // Function to determine the authentification
 function encryptedPasswordAuthorizer(username, password, cb) {
+  // Read the CSV file
   fs.readFile('user.csv', 'utf8', (err, data) => {
     if (err) {
       callback(err);
       return;
     }
+    // Split the lines
     var lines = data.split('\n');
+    // Split the header
     const header = lines[0].split(',');
+    // Create a list of users
     var users = [];
+    // Loop on the lines
     for(let i = 1; i < lines.length; i++) {
+      // Create a dict with all the usernames and passwords
       var values = lines[i].split(',');
       var dict = {};
       dict[header[0]] = values[0].replace('\\n', '');
       dict[header[1]] = values[1];
       users.push(dict);
     }
+    // Find the username in the list
     const storedUser = users.find((possibleUser) => {
       return basicAuth.safeCompare(possibleUser.username, username);
     });
+    // If username not found
     if (!storedUser) {
-      // username not found
       cb(null, false);
     } else {
+      // Compare the hash password
       bcrypt.compare(password, storedUser.password, cb);
     }
   });
 }
 
-// Serving some HTML as a file
+// GET method route for home
 app.get('/home', function (req, res) {
-  res.sendFile(path.join(__dirname,"./views/home.html"));
+  res.render('home');
 });
 
-// Enable static files loading
-app.use(express.static("public"));
-// Define the encoding => URL Extension
-app.use(express.urlencoded({ extended: true }));
-
-// Define a route for /students/:id
-app.get('/students/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  dataFromCsvFile('Sheet_school.csv', (err, students) => {
-    if (err) {
-      res.status(500).send('Internal server error');
-      return;
-    }
-    if (id >= 0 && id < students.length) {
-      const student = students[id];
-      res.render('student_details', { student, id });
-    } else {
-      res.send('Student not found');
-    }
-  });
-});
-
-// GET method route
+// GET method route for student details test page
 app.get('/student/details', (req, res) => {
   const student = {
       name: "Student name",
@@ -85,11 +86,12 @@ app.get('/student/details', (req, res) => {
   res.render('student_details', { student });
 });
 
-// GET method route
+// GET method route for test page
 app.get('/test', (req, res) => {
   res.send(`
     <html>
       <head>
+        <title>Test page</title>
         <link rel="stylesheet" href="/style.css">
       </head>
       <body>
@@ -99,18 +101,19 @@ app.get('/test', (req, res) => {
   `);
 });
 
-// GET method route
+// GET method route for home redirection
 app.get('/', (req, res) => {
   res.redirect("/home");
 });
 
-// GET method route
+// GET method route for data about students
 app.get('/students/data', (req, res) => {
   res.render('students_data');
 });
 
-// GET method route
+// GET method route for list of students
 app.get('/students', (req, res) => {
+  // Use the function to send the student data from the CSV
   dataFromCsvFile('Sheet_school.csv', (err, students) => {
     if (err) {
       console.error(err);
@@ -123,17 +126,20 @@ app.get('/students', (req, res) => {
   });
 });
 
-// Create new student display
+// GET method route for creating a new student
 app.get('/student/create', (req, res) => {
   res.render('create-student');
 });
 
+// POST method route for creating a new student
 // Create new student storing data
 app.post('/student/create', (req, res) => {
-  console.log(req.body);
-  console.log(req.body.name, req.body.school);
+  // console.log(req.body);
+  // console.log(req.body.name, req.body.school);
+  // Get the student data
   const csvLine =`\n${req.body.name},${req.body.school}`;
-  console.log(csvLine);
+  // console.log(csvLine);
+  // Write the new student data
   fs.writeFile('Sheet_school.csv', csvLine, {
     encoding: "utf8",
     flag: "a"
@@ -141,21 +147,96 @@ app.post('/student/create', (req, res) => {
     if (err) throw err; {
       console.log(err)
     } 
+    // Redirect the user
     res.redirect("/student/create?created=1");
+  });
+});
+
+// GET method route for student details
+// Define a route for /students/:id
+app.get('/students/:id', (req, res) => {
+  // Get the id of the student
+  const id = parseInt(req.params.id);
+  // Get the student data
+  dataFromCsvFile('Sheet_school.csv', (err, students) => {
+    if (err) {
+      res.status(500).send('Internal server error');
+      return;
+    }
+    // If the id matches with the line
+    if (id >= 0 && id < students.length) {
+      const student = students[id];
+      res.render('student_details', { student, id });
+    } else {
+      res.send('Student not found');
+    }
+  });
+});
+
+// POST method route for student updated details
+// Update the student information
+app.post('/students/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  // Read the CSV file and parse it as JSON object
+  fs.readFile('Sheet_school.csv', 'utf8', (err, data) => {
+    if (err) {
+      res.status(500).send('Internal server error');
+      return;
+    }
+    // Split the data into lines
+    const lines = data.split('\n');
+    // Parse the header
+    const header = lines[0].split(',');
+    // Create an array to store the updated student data
+    const updatedStudents = [];
+    // Loop over the lines
+    for (let i = 1; i < lines.length; i++) {
+      const values = lines[i].split(',');
+      // Create a JSON object for each student
+      const student = {
+        name: values[0],
+        school: values[1]
+      };
+      // If the current line is the one, update
+      if (i === id + 1) {
+        student.name = req.body.name;
+        student.school = req.body.school;
+      }
+      // Add the student to the array
+      updatedStudents.push(student);
+    }
+    // Convert the array to CSV format
+    const updatedCsv = `${header.join(',')}\n${updatedStudents
+      .map(student => `${student.name},${student.school}`)
+      .join('\n')}`;
+    // Write the updated CSV content
+    fs.writeFile('Sheet_school.csv', updatedCsv, 'utf8', err => {
+      if (err) {
+        res.status(500).send('Internal server error');
+        return;
+      }
+      res.redirect(`/students/${id}`);
+    });
   });
 });
 
 // Function to send a list of students from Sheet_school.csv
 function dataFromCsvFile(name, callback) {
+  // Read the data from the CSV
   fs.readFile(name, 'utf8', (err, data) => {
     if (err) {
       callback(err);
       return;
     }
+    // Split the data into lines
     var lines = data.split('\n');
+    // Parse the header
     const header = lines[0].split(',');
+    // Create an array to store the student data
     var list = [];
+    // Loop over the lines
     for(let i = 1; i < lines.length; i++) {
+      // Add the data to the dict for each student
       var values = lines[i].split(',');
       var dict = {};
       dict[header[0]] = values[0].replace('\\n', '');
@@ -166,24 +247,7 @@ function dataFromCsvFile(name, callback) {
   });
 }
 
-/// API
-// POST method route
-// Authorization: "Bearer <your-token>" , instead of Authorization: "Basic<encoded-username-and-password>"
-// using secure cookies
-app.post("/api/login", (req, res) => {
-  console.log("current cookies:", req.cookies);
-  // We assume that you check if the user can login based on "req.body"
-  // and then generate an authentication token
-  const token = "FOOBAR";
-  const tokenCookie = {
-    path: "/",
-    httpOnly: true,
-    expires: new Date(Date.now() + 60 * 60 * 1000),
-  };
-  res.cookie("auth-token", token, tokenCookie);
-  res.send("OK");
-});
-
+////// API \\\\\\
 // GET method route /api/student
 app.get('/api/student', function (req, res) {
   res.send(["My name is Tristan and I try to understand the Get method", 
@@ -226,9 +290,4 @@ app.post('/api/student/create', function (req, res, next) {
     } 
     res.json("Student created");
   });
-});
-
-// Print the port in the console
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
 });
