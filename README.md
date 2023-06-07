@@ -6,18 +6,18 @@ This is a book app project.
 
 ## Installation
 
-1. Install Git with sudo apt-get install git.
+1. Install Git with >sudo apt-get install git.
 2. Install NVM (Node Version Manager) https://github.com/nvm-sh/nvm
 3. Clone this repository to your local machine.
-4. Open a terminal and navigate to the project's directory.
+4. Open a terminal and navigate to the project's directory (EPFBOOK).
 5. Run the following command to install the dependencies:
-    npm install
+    >npm install
 
 
 ## Usage
 
 1. After the installation is complete, you can start the app using the following command:
-    npm run dev
+    >npm run dev
 
 This will start the app with Nodemon, which automatically restarts the server when changes are made to the code.
 
