@@ -6,18 +6,19 @@ This is a book app project.
 
 ## Installation
 
-1. Install Git with sudo apt-get install git.
+1. Install git 
+    >sudo apt-get install git.
 2. Install NVM (Node Version Manager) https://github.com/nvm-sh/nvm
 3. Clone this repository to your local machine.
-4. Open a terminal and navigate to the project's directory.
+4. Open a terminal and navigate to the project's directory (EPFBOOK).
 5. Run the following command to install the dependencies:
-    npm install
+    >npm install
 
 
 ## Usage
 
 1. After the installation is complete, you can start the app using the following command:
-    npm run dev
+    >npm run dev
 
 This will start the app with Nodemon, which automatically restarts the server when changes are made to the code.
 
@@ -45,13 +46,13 @@ This project is licensed under the ISC License.
 # Deploy the EPFBook App
 
 1. Install NGINX and configure it to work as a reverse proxy
-    sudo apt-get install nginx
+    >sudo apt-get install nginx
 
 2. Make a backup of the default configuration file
-    sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.backup
+    >sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.backup
 
 3. Open the NGINX configuration file using a text editor
-    sudo nano /etc/nginx/sites-available/default
+    >sudo nano /etc/nginx/sites-available/default
 
 4. Replace 0.0.0.0:3000 with the appropriate IP address and port where your application is running. 
    Update the configuration file as shown below:
@@ -68,7 +69,7 @@ This project is licensed under the ISC License.
 5. Save the file and exit the text editor.
 
 6. Restart NGINX to apply the changes
-    sudo systemctl restart nginx
+    >sudo systemctl restart nginx
 
 7. Open your server's URL in a browser, and you should be redirected to your site's homepage. 
    If you encounter a 502 error, make sure that your Node server is running.
